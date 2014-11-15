@@ -1,9 +1,24 @@
 #!/bin/bash
 
+ALL_ARGS=$(getopt -o y --long yes -n $0 -- "$@")
+eval set -- "$ALL_ARGS"
+
+NEEDCONFIRM=true
+while true
+do
+	case "$1" in
+		-y|--yes) NEEDCONFIRM=false ; shift ;;
+		--) shift; break ;;
+		*) echo "Internal error." ; exit 1 ;;
+	esac
+done
+
 if [ $# -ne 1 ]
 then
-	echo "Usage: $0 <INET_IF>"
+	echo "Usage: $0 [options] <INET_IF>"
 	echo "Where INET_IF is a network interface name which has access to Internet (for Public network)."
+	echo "Options:"
+	echo " -y/--yes		Proceed without asking for a confirmation."
 	exit 1
 fi
 
@@ -24,14 +39,17 @@ echo "2. slave node used as controller, 1 CPU, 1 GB RAM"
 echo "3. slave node used as ceph-osd, 1 CPU, 2 GB RAM"
 echo "4. slave node used as compute, 1 CPU, 3 GB RAM"
 echo
-echo "Do you want to continue? (yes/no)"
-
-read CONT_VAR
-
-if [ ! $CONT_VAR == "yes" ]
+if $NEEDCONFIRM
 then
-	echo "Aborted."
-	exit 1
+	echo "Do you want to continue? (yes/no)"
+	
+	read CONT_VAR
+	
+	if [ ! $CONT_VAR == "yes" ]
+	then
+		echo "Aborted."
+		exit 1
+	fi
 fi
 
 echo "Initializing network..."
