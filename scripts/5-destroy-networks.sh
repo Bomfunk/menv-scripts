@@ -8,13 +8,14 @@ then
 fi
 
 INET_IF=$(cat inet_if)
+source env.cfg
 
-sudo ip link set f51-nh-adm down
-sudo brctl delbr f51-nh-adm
+sudo ip link set $net_prefix-adm down
+sudo brctl delbr $net_prefix-adm
 
-sudo iptables -t nat -D POSTROUTING -o $INET_IF -s 172.16.0.0/255.255.255.0 -j MASQUERADE
-sudo ip link set f51-nh-pub down
-sudo brctl delbr f51-nh-pub
+sudo iptables -t nat -D POSTROUTING -o $INET_IF -s $pub_subnet.0/255.255.255.0 -j MASQUERADE
+sudo ip link set $net_prefix-pub down
+sudo brctl delbr $net_prefix-pub
 
-sudo ip link set f51-nh-prv down
-sudo brctl delbr f51-nh-prv
+sudo ip link set $net_prefix-prv down
+sudo brctl delbr $net_prefix-prv

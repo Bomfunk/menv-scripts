@@ -8,9 +8,10 @@ then
 fi
 
 INET_IF=$(cat inet_if)
+source env.cfg
 
 echo "Destroying VMs..."
-./scripts/4-destroy-vms.sh 3
+./scripts/4-destroy-vms.sh
 
 echo "Destroying remaining networks..."
 ./scripts/5-destroy-networks.sh

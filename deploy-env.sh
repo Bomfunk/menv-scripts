@@ -8,15 +8,16 @@ then
 fi
 
 INET_IF=$1
+source env.cfg
 
 echo -n $INET_IF > inet_if
 
 echo "What is going to be deployed is described below."
 echo "------------------------------------------------"
 echo "Network bridges:"
-echo "1. f51-nh-adm, 10.20.0.1/24"
-echo "2. f51-nh-pub, 172.16.0.1/24, with Internet access"
-echo "3. f51-nh-prv, 172.16.1.1/24, with promiscuous mode"
+echo "1. $net_prefix-adm, $adm_subnet.1/24"
+echo "2. $net_prefix-pub, $pub_subnet.1/24, with Internet access"
+echo "3. $net_prefix-prv, $prv_subnet.1/24, with promiscuous mode"
 echo "Virtual machines:"
 echo "1. fuel-pm, 1 CPU, 1 GB RAM"
 echo "2. slave node used as controller, 1 CPU, 1 GB RAM"
@@ -43,8 +44,8 @@ then
 fi
 
 echo "Launching VMs..."
-./scripts/3-launch-vms.sh 3
 touch not-clear
+./scripts/3-launch-vms.sh
 
 echo "All done. Use IP address 10.20.0.2 to access Fuel Master, and 172.16.0.2 for Horizon."
 echo "Use destroy-env.sh script to tear down the environment and destroy the networks."

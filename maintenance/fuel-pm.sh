@@ -1,16 +1,18 @@
 #!/bin/sh
 
-VM_NAME=f51-nonha-pm
+source env.cfg
+
+VM_NAME=$vm_prefix-pm
 
 virt-install -n $VM_NAME \
  -r 1024 \
  --vcpus=1 \
  --arch=x86_64 \
  --disk path=$(pwd)/fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
- --cdrom /home/bomfunk/iso/MirantisOpenStack-5.1.iso \
- --network bridge=f51-nh-adm,mac=52:54:00:DD:C8:00 \
- --network bridge=f51-nh-pub,mac=52:54:00:BE:22:00 \
- --network bridge=f51-nh-prv,mac=52:54:00:22:7A:00 \
+ --cdrom $iso_path \
+ --network bridge=$net_prefix-adm,mac=$adm_mac_prefix:00 \
+ --network bridge=$net_prefix-pub,mac=$pub_mac_prefix:00 \
+ --network bridge=$net_prefix-prv,mac=$prv_mac_prefix:00 \
  --noautoconsole \
  --graphics vnc,listen=0.0.0.0 
 

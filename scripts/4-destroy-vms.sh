@@ -1,15 +1,11 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]
-then
-	echo "Usage: $0 <slaves_count>"
-	exit 1
-fi
+source env.cfg
 
-sudo virsh destroy f51-nonha-pm
-sudo virsh undefine f51-nonha-pm
-for i in $(seq 1 $1)
+sudo virsh destroy $vm_prefix-pm
+sudo virsh undefine $vm_prefix-pm
+for i in $(seq 1 $slaves_count)
 do
-	sudo virsh destroy f51-nonha-slave-$i
-	sudo virsh undefine f51-nonha-slave-$i
+	sudo virsh destroy $vm_prefix-slave-$i
+	sudo virsh undefine $vm_prefix-slave-$i
 done
