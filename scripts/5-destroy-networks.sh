@@ -19,3 +19,11 @@ sudo brctl delbr $net_prefix-pub
 
 sudo ip link set $net_prefix-prv down
 sudo brctl delbr $net_prefix-prv
+
+if $external_forward
+then
+	for i in $(seq 1 $forward_count)
+	do
+		iptables -t nat -A PREROUTING -i $INET_IF -p tcp --dport $ex_forw[$i] -j DNAT --to $ex_forw_to[$i]
+	done
+fi
