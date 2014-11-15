@@ -44,7 +44,7 @@ do
 	 -r ${slave_ram[$i]} \
 	 --vcpus=1 \
 	 --arch=x86_64 \
-	 --disk path=$(pwd)/fuel-slave-$i.qcow2,bus=virtio,device=disk,format=qcow2 \
+	 --disk path=$(pwd)/diff.fuel-slave-$i.qcow2,bus=virtio,device=disk,format=qcow2 \
 	 --network bridge=$net_prefix-adm,mac=$adm_mac_prefix:$MACNUM \
 	 --network bridge=$net_prefix-pub,mac=$pub_mac_prefix:$MACNUM \
 	 --network bridge=$net_prefix-prv,mac=$prv_mac_prefix:$MACNUM \
