@@ -19,14 +19,7 @@ echo -n $VM_NAME
 sudo virsh vncdisplay $VM_NAME
 
 echo "Waiting for fuel master to become ready..."
-
-COBBLER_LISTEN=0
-sleep 30
-while [ $COBBLER_LISTEN -lt 3 ]
-do
-	COBBLER_LISTEN=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i master-key root@$adm_subnet.2 dockerctl shell cobbler netstat -lntp | wc -l)
-	sleep 15
-done
+./preparation/wait-for-master.sh
 echo "Master node is ready! Waiting 10 seconds before proceeding..."
 sleep 10
 
@@ -55,3 +48,5 @@ do
 	echo -n $VM_NAME
 	sudo virsh vncdisplay $VM_NAME
 done
+
+./preparation/post-launch.sh
