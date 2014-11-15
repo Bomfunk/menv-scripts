@@ -26,7 +26,7 @@ if [ $(cat /proc/sys/net/ipv4/ip_forward) == "0" ]
 then
 	echo "IP Forwarding is not enabled on this machine!"
 	echo "It is necessary for the VMs to reach Internet."
-	echo "Please enable it using this command and try again: \"echo 1 > /proc/sys/net/ipv4/ip_forward\""
+	echo "Please enable it using this command and try again: \"echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward\""
 	exit 1
 fi
 
