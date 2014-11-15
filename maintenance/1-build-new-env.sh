@@ -14,7 +14,7 @@ echo -n $INET_IF > inet_if
 
 ./scripts/1-init-network.sh
 ./maintenance/new-disks.sh
-sudo ./maintenance/fuel-pm.sh
+./maintenance/fuel-pm.sh
 
 ssh-keygen -P "" -f master-key
 

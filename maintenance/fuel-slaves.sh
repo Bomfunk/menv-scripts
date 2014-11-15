@@ -12,7 +12,7 @@ do
 		MACNUM=$i
 	fi
 	
-	virt-install -n $VM_NAME \
+	sudo virt-install -n $VM_NAME \
 	 -r ${slave_ram[$i]} \
 	 --vcpus=1 \
 	 --arch=x86_64 \

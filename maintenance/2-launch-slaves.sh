@@ -2,7 +2,7 @@
 
 source env.cfg
 
-sudo ./maintenance/fuel-slaves.sh
+./maintenance/fuel-slaves.sh
 
 echo "Now configure and deploy the environment."
 echo "Do not forget to add master-key.pub to .ssh/authorized_keys of the master node."

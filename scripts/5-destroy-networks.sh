@@ -24,6 +24,6 @@ if $external_forward
 then
 	for i in $(seq 1 $forward_count)
 	do
-		sudo iptables -t nat -A PREROUTING -i $INET_IF -p tcp --dport ${ex_forw[$i]} -j DNAT --to ${ex_forw_to[$i]}
+		sudo iptables -t nat -D PREROUTING -i $INET_IF -p tcp --dport ${ex_forw[$i]} -j DNAT --to ${ex_forw_to[$i]}
 	done
 fi

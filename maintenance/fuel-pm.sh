@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 source env.cfg
 
 VM_NAME=$vm_prefix-pm
 
-virt-install -n $VM_NAME \
+sudo virt-install -n $VM_NAME \
  -r 1024 \
  --vcpus=1 \
  --arch=x86_64 \
