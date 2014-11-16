@@ -15,6 +15,12 @@ sudo virt-install -n $VM_NAME \
  --network bridge=$net_prefix-prv,mac=$prv_mac_prefix:00 \
  --noautoconsole \
  --graphics vnc,listen=0.0.0.0 
+if [ $? -ne 0 ]
+then
+	echo "Error encountered while launching a VM: terminating."
+	echo "Note: you may want to launch ./destroy-env.sh script to clear the networks/incomplete vms."
+	exit 1
+fi
 
 echo -n $VM_NAME
 virsh vncdisplay $VM_NAME
