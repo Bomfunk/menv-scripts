@@ -5,7 +5,7 @@ source env.cfg
 VM_NAME=$vm_prefix-pm
 
 sudo virt-install -n $VM_NAME \
- -r 1024 \
+ -r $master_ram \
  --vcpus=1 \
  --arch=x86_64 \
  --disk path=$(pwd)/fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
