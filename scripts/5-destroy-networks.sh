@@ -10,15 +10,14 @@ fi
 INET_IF=$(cat inet_if)
 source env.cfg
 
-sudo ip link set $net_prefix-adm down
-sudo brctl delbr $net_prefix-adm
-
-sudo iptables -t nat -D POSTROUTING -o $INET_IF -s $pub_subnet.0/255.255.255.0 -j MASQUERADE
-sudo ip link set $net_prefix-pub down
-sudo brctl delbr $net_prefix-pub
-
-sudo ip link set $net_prefix-prv down
-sudo brctl delbr $net_prefix-prv
+for i in $(seq 1 $networks)
+do
+	if ${subnet_internet[$i]} ; then
+		sudo iptables -t nat -D POSTROUTING -o $INET_IF -s ${subnet[$i]}.0/255.255.255.0 -j MASQUERADE
+	fi
+	sudo ip link set $net_prefix-$i down
+	sudo brctl delbr $net_prefix-$i
+done
 
 if $external_forward
 then

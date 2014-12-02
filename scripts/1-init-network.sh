@@ -10,19 +10,19 @@ fi
 INET_IF=$(cat inet_if)
 source env.cfg
 
-sudo brctl addbr $net_prefix-adm
-sudo ip addr add $adm_subnet.1/24 dev $net_prefix-adm
-sudo ip link set $net_prefix-adm up
+for i in $(seq 1 $networks)
+do
+	sudo brctl addbr $net_prefix-$i
+	sudo ip addr add ${subnet[$i]}.1/24 dev $net_prefix-$i
+	sudo ip link set $net_prefix-$i up
 
-sudo brctl addbr $net_prefix-pub
-sudo ip addr add $pub_subnet.1/24 dev $net_prefix-pub
-sudo ip link set $net_prefix-pub up
-sudo iptables -t nat -A POSTROUTING -o $INET_IF -s $pub_subnet.0/255.255.255.0 -j MASQUERADE
-
-sudo brctl addbr $net_prefix-prv
-sudo ip addr add $prv_subnet.1/24 dev $net_prefix-prv
-sudo ip link set $net_prefix-prv up
-sudo ip link set $net_prefix-prv promisc on
+	if ${subnet_internet[$i]} ; then
+		sudo iptables -t nat -A POSTROUTING -o $INET_IF -s ${subnet[$i]}.0/255.255.255.0 -j MASQUERADE
+	fi
+	if ${subnet_promisc[$i]} ; then
+		sudo ip link set $net_prefix-$i promisc on
+	fi
+done
 
 if $external_forward
 then
