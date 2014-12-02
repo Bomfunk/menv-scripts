@@ -13,9 +13,9 @@ do
 	fi
 	
 	virt_net_params=""
-	for i in $(seq 1 $networks)
+	for j in $(seq 1 $networks)
 	do
-		virt_net_params="$virt_net_params --bridge=$net_prefix-$i,mac=${subnet_mac_prefix[$i]}:$MACNUM"
+		virt_net_params="$virt_net_params --bridge=$net_prefix-$j,mac=${subnet_mac_prefix[$j]}:$MACNUM"
 	done
 	sudo virt-install -n $VM_NAME \
 	 -r ${slave_ram[$i]} \
