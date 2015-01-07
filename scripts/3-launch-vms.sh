@@ -47,11 +47,18 @@ do
 	do
 		virt_net_params="$virt_net_params --bridge=$net_prefix-$j,mac=${subnet_mac_prefix[$j]}:$MACNUM"
 	done
+	
+	virt_disks_params=""
+	for j in $(seq 1 ${node_disks[$i]})
+	do
+		virt_disks_params="$virt_disks_params --disk path=$(pwd)/diff.fuel-slave-$i-$j.qcow2,bus=virtio,device=disk,format=qcow2"
+	done
+
 	sudo virt-install -n $VM_NAME \
 	 -r ${slave_ram[$i]} \
 	 --vcpus=1 \
 	 --arch=x86_64 \
-	 --disk path=$(pwd)/diff.fuel-slave-$i.qcow2,bus=virtio,device=disk,format=qcow2 \
+	 $virt_disks_params \
 	 $virt_net_params \
 	 --boot network \
 	 --noautoconsole \
