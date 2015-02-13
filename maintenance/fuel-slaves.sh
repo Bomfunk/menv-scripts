@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source env.cfg
+source $PATH_TO_ENV/env.cfg
 
 for i in $(seq 1 $slaves_count)
 do
@@ -21,7 +21,7 @@ do
 	virt_disks_params=""
 	for j in $(seq 1 ${node_disks[$i]})
 	do
-		virt_disks_params="$virt_disks_params --disk path=$(pwd)/fuel-slave-$i-$j.qcow2,bus=virtio,device=disk,format=qcow2"
+		virt_disks_params="$virt_disks_params --disk path=$PATH_TO_ENV/fuel-slave-$i-$j.qcow2,bus=virtio,device=disk,format=qcow2"
 	done
 
 	sudo virt-install -n $VM_NAME \

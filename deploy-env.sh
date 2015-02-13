@@ -13,10 +13,11 @@ do
 	esac
 done
 
-if [ $# -ne 1 ]
+if [ $# -ne 2 ]
 then
-	echo "Usage: $0 [options] <INET_IF>"
-	echo "Where INET_IF is a network interface name which has access to Internet (for Public network)."
+	echo "Usage: $0 [options] <PATH_TO_ENV> <INET_IF>"
+	echo "Where PATH_TO_ENV is path to the environment - snapshots, configuration file etc.,"
+	echo "and INET_IF is a network interface name which has access to Internet (for Public network)."
 	echo "Options:"
 	echo " -y/--yes		Proceed without asking for a confirmation."
 	exit 1
@@ -30,10 +31,17 @@ then
 	exit 1
 fi
 
-INET_IF=$1
-source env.cfg
+export PATH_TO_ENV=$(readlink -f $1)
+if [ ! -d "$PATH_TO_ENV" ]
+then
+	echo "The specified environment directory doesn't exist, aborting."
+	exit 1
+fi
 
-echo -n $INET_IF > inet_if
+INET_IF=$2
+source $PATH_TO_ENV/env.cfg
+
+echo -n $INET_IF > $PATH_TO_ENV/inet_if
 
 echo "What is going to be deployed is described below."
 echo "------------------------------------------------"
@@ -54,14 +62,14 @@ fi
 echo "Initializing network..."
 ./scripts/1-init-network.sh
 
-if [ -f not-clear ]
+if [ -f $PATH_TO_ENV/not-clear ]
 then
 	echo "Applying saved snapshots..."
 	./scripts/2-apply-snapshots.sh
 fi
 
 echo "Launching VMs..."
-touch not-clear
+touch $PATH_TO_ENV/not-clear
 ./scripts/3-launch-vms.sh
 
 echo "All done. Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source env.cfg
+source $PATH_TO_ENV/env.cfg
 
 ./maintenance/fuel-slaves.sh
 

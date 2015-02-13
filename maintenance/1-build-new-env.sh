@@ -1,22 +1,30 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]
+if [ $# -ne 2 ]
 then
-	echo "Usage: $0 <INET_IF>"
-	echo "Where INET_IF is a network interface name which has access to Internet (for Public network)."
+	echo "Usage: $0 <PATH_TO_ENV> <INET_IF>"
+	echo "Where PATH_TO_ENV is path to the environment - snapshots, configuration file etc.,"
+	echo "and INET_IF is a network interface name which has access to Internet (for Public network)."
 	exit 1
 fi
 
-INET_IF=$1
-source env.cfg
+export PATH_TO_ENV=$(readlink -f $1)
+if [ ! -d "$PATH_TO_ENV" ]
+then
+	echo "The specified environment directory doesn't exist, aborting."
+	exit 1
+fi
 
-echo -n $INET_IF > inet_if
+INET_IF=$2
+source $PATH_TO_ENV/env.cfg
+
+echo -n $INET_IF > $PATH_TO_ENV/inet_if
 
 ./scripts/1-init-network.sh
 ./maintenance/new-disks.sh
 ./maintenance/fuel-pm.sh
 
-ssh-keygen -P "" -f master-key
+ssh-keygen -P "" -f $PATH_TO_ENV/master-key
 
 echo "When master node finishes OS installing, it usually goes down instead of rebooting - that's how QEMU works by default."
 echo "Simply execute \"sudo virsh start $vm_prefix-pm\" to bring it back up. To monitor it's initial state, use \"watch -n 15 sudo virsh list --all\""

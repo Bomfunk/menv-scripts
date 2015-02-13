@@ -1,14 +1,14 @@
 #!/bin/bash
 
-if [ ! -f inet_if ]
+if [ ! -f $PATH_TO_ENV/inet_if ]
 then
 	echo "Network settings for these nodes were not found."
 	echo "Aborting the networking script!"
 	exit 1
 fi
 
-INET_IF=$(cat inet_if)
-source env.cfg
+INET_IF=$(cat $PATH_TO_ENV/inet_if)
+source $PATH_TO_ENV/env.cfg
 
 for i in $(seq 1 $networks)
 do

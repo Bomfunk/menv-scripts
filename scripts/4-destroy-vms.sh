@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source env.cfg
+source $PATH_TO_ENV/env.cfg
 
 sudo virsh destroy $vm_prefix-pm
 sudo virsh undefine $vm_prefix-pm

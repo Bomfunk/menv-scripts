@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source env.cfg
+source $PATH_TO_ENV/env.cfg
 
 VM_NAME=$vm_prefix-pm
 virt_net_params=""
@@ -12,7 +12,7 @@ sudo virt-install -n $VM_NAME \
  -r $master_ram \
  --vcpus=1 \
  --arch=x86_64 \
- --disk path=$(pwd)/diff.fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
+ --disk path=$PATH_TO_ENV/diff.fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
  $virt_net_params \
  --boot hd \
  --noautoconsole \
@@ -28,9 +28,9 @@ echo -n $VM_NAME
 sudo virsh vncdisplay $VM_NAME
 
 echo "Waiting for fuel master to become ready..."
-./preparation/wait-for-master.sh
-echo "Master node is ready! Waiting 10 seconds before proceeding..."
-sleep 10
+$PATH_TO_ENV/preparation/wait-for-master.sh
+echo "Master node is ready! Waiting 30 seconds before proceeding..."
+sleep 30
 
 for i in $(seq 1 $slaves_count)
 do
@@ -51,7 +51,7 @@ do
 	virt_disks_params=""
 	for j in $(seq 1 ${node_disks[$i]})
 	do
-		virt_disks_params="$virt_disks_params --disk path=$(pwd)/diff.fuel-slave-$i-$j.qcow2,bus=virtio,device=disk,format=qcow2"
+		virt_disks_params="$virt_disks_params --disk path=$PATH_TO_ENV/diff.fuel-slave-$i-$j.qcow2,bus=virtio,device=disk,format=qcow2"
 	done
 
 	sudo virt-install -n $VM_NAME \
@@ -74,4 +74,4 @@ do
 	sudo virsh vncdisplay $VM_NAME
 done
 
-./preparation/post-launch.sh
+$PATH_TO_ENV/preparation/post-launch.sh

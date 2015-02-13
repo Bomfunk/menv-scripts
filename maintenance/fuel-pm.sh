@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source env.cfg
+source $PATH_TO_ENV/env.cfg
 
 VM_NAME=$vm_prefix-pm
 
@@ -13,7 +13,7 @@ sudo virt-install -n $VM_NAME \
  -r $master_ram \
  --vcpus=1 \
  --arch=x86_64 \
- --disk path=$(pwd)/fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
+ --disk path=$PATH_TO_ENV/fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
  --cdrom $iso_path \
  $virt_net_params \
  --noautoconsole \
