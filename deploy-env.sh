@@ -73,5 +73,17 @@ touch $PATH_TO_ENV/not-clear
 ./scripts/3-launch-vms.sh
 
 echo "All done. Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
+if $external_forward
+then
+	echo -n "Also, the following port forwards are set on this machine: "
+	for i in $(seq 1 $forward_count)
+	do
+		echo -n "${ex_forw[$i]} to ${ex_forw_to[$i]}"
+		if [ $i -lt $forward_count ] ; then echo -n ", " ; fi
+	done
+	echo
+else
+	echo "Port forwards were not configured on this machine."
+fi
 echo "Use destroy-env.sh script to tear down the environment and destroy the networks."
 echo "Enjoy!"
