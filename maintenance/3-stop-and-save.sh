@@ -15,6 +15,6 @@ then
 fi
 
 ./maintenance/save-snapshots.sh
-./destroy-env.sh
+./destroy-env.sh $PATH_TO_ENV
 
 echo "Congratulations! Your new mobile environment is ready to be used."
