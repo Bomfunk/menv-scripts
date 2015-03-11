@@ -30,9 +30,9 @@ echo "Destroying VMs..."
 echo "Destroying remaining networks..."
 ./scripts/5-destroy-networks.sh
 
-echo "Clearing diff qcow2's..."
-./scripts/2-apply-snapshots.sh
+echo "Removing diff qcow2's..."
+sudo rm $PATH_TO_ENV/diff*
 
-rm -f $PATH_TO_ENV/not-clear $PATH_TO_ENV/inet_if
+rm -f $PATH_TO_ENV/inet_if
 
 echo "All done. Goodbye!"

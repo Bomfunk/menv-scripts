@@ -62,14 +62,10 @@ fi
 echo "Initializing network..."
 ./scripts/1-init-network.sh
 
-if [ -f $PATH_TO_ENV/not-clear ]
-then
-	echo "Applying saved snapshots..."
-	./scripts/2-apply-snapshots.sh
-fi
+echo "Applying saved snapshots..."
+./scripts/2-apply-snapshots.sh
 
 echo "Launching VMs..."
-touch $PATH_TO_ENV/not-clear
 ./scripts/3-launch-vms.sh
 
 echo "All done. Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
