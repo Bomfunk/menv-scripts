@@ -9,6 +9,17 @@ for i in $(seq 1 $networks)
 do
 	virt_net_params="$virt_net_params --bridge=$net_prefix-$i,mac=${subnet_mac_prefix[$i]}:00"
 done
+
+if [ -z $master_ram ]
+then
+	if [ -z $default_ram ]
+	then
+		master_ram=1024
+	else
+		master_ram=$default_ram
+	fi
+fi
+
 sudo virt-install -n $VM_NAME \
  -r $master_ram \
  --vcpus=1 \

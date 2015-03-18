@@ -8,6 +8,17 @@ for i in $(seq 1 $networks)
 do
 	virt_net_params="$virt_net_params --bridge=$net_prefix-$i,mac=${subnet_mac_prefix[$i]}:00"
 done
+
+if [ -z $master_ram ]
+then
+	if [ -z $default_ram ]
+	then
+		master_ram=1024
+	else
+		master_ram=$default_ram
+	fi
+fi
+
 sudo virt-install -n $VM_NAME \
  -r $master_ram \
  --vcpus=1 \
@@ -47,12 +58,32 @@ do
 	do
 		virt_net_params="$virt_net_params --bridge=$net_prefix-$j,mac=${subnet_mac_prefix[$j]}:$MACNUM"
 	done
+
+	if [ -z ${node_disks[$i]} ]
+	then
+		if [ -z $default_disks ]
+		then
+			node_disks[$i]=1
+		else
+			node_disks[$i]=$default_disks
+		fi
+	fi
 	
 	virt_disks_params=""
 	for j in $(seq 1 ${node_disks[$i]})
 	do
 		virt_disks_params="$virt_disks_params --disk path=$PATH_TO_ENV/diff.fuel-slave-$i-$j.qcow2,bus=virtio,device=disk,format=qcow2"
 	done
+
+	if [ -z ${slave_ram[$i]} ]
+	then
+		if [ -z $default_ram ]
+		then
+			slave_ram[$i]=1024
+		else
+			slave_ram[$i]=$default_ram
+		fi
+	fi
 
 	sudo virt-install -n $VM_NAME \
 	 -r ${slave_ram[$i]} \
