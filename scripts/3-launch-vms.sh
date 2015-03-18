@@ -103,6 +103,12 @@ do
 	
 	echo -n $VM_NAME
 	sudo virsh vncdisplay $VM_NAME
+
+	if [ ! -z $pause_between_slaves ] && [ $i -lt $slaves_count ]
+	then
+		echo "Sleeping for $pause_between_slaves..."
+		sleep $pause_between_slaves
+	fi
 done
 
 $PATH_TO_ENV/preparation/post-launch.sh
