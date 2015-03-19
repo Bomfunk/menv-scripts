@@ -39,6 +39,7 @@ then
 fi
 
 INET_IF=$2
+INET_IF_IP4=$(ip -o -4 addr list $INET_IF | awk '{print $4}' | cut -d/ -f1)
 source $PATH_TO_ENV/env.cfg
 
 echo -n $INET_IF > $PATH_TO_ENV/inet_if
@@ -71,11 +72,10 @@ echo "Launching VMs..."
 echo "All done. Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
 if $external_forward
 then
-	echo -n "Also, the following port forwards are set on this machine: "
+	echo "Also, the following port forwards are set on this machine: "
 	for i in $(seq 1 $forward_count)
 	do
-		echo -n "${ex_forw[$i]} to ${ex_forw_to[$i]}"
-		if [ $i -lt $forward_count ] ; then echo -n ", " ; fi
+		echo ${INET_IF_IP4}:"${ex_forw[$i]} to ${ex_forw_to[$i]}"
 	done
 	echo
 else
