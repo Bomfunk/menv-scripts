@@ -71,11 +71,12 @@ echo "Launching VMs..."
 echo "All done. Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
 if $external_forward
 then
-	echo -n "Also, the following port forwards are set on this machine: "
+	echo "Also, the following port forwards are set on this machine: "
+	echo "(Note: the IP of this host on $INET_IF is $(ip -o -4 addr list $INET_IF | awk '{print $4}' | cut -d/ -f1))"
 	for i in $(seq 1 $forward_count)
 	do
-		echo -n "${ex_forw[$i]} to ${ex_forw_to[$i]}"
-		if [ $i -lt $forward_count ] ; then echo -n ", " ; fi
+		echo -n "0.0.0.0:${ex_forw[$i]} to ${ex_forw_to[$i]}"
+		if [ $i -lt $forward_count ] ; then echo "," ; else echo "." ; fi
 	done
 	echo
 else
