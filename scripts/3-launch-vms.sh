@@ -91,7 +91,7 @@ do
 	 --arch=x86_64 \
 	 $virt_disks_params \
 	 $virt_net_params \
-	 --boot network \
+	 --boot network,hd \
 	 --noautoconsole \
 	 --graphics vnc,listen=0.0.0.0
 	if [ $? -ne 0 ]
