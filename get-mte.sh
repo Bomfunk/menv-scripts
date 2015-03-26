@@ -3,7 +3,7 @@
 server="172.18.66.13"
 envs_path="$HOME/mte/"
 
-ALL_ARGS=$(getopt -o p:s: --long path:server: -n $0 -- "$@")
+ALL_ARGS=$(getopt -o p:s: --long path:,server: -n $0 -- "$@")
 eval set -- "$ALL_ARGS"
 while true
 do
