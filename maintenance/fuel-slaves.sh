@@ -44,9 +44,19 @@ do
 		fi
 	fi
 
+	if [ -z ${slave_vcpus[$i]} ]
+	then
+		if [ -z $default_vcpus ]
+		then
+			slave_vcpus[$i]=1
+		else
+			slave_vcpus[$i]=$default_vcpus
+		fi
+	fi
+
 	sudo virt-install -n $VM_NAME \
 	 -r ${slave_ram[$i]} \
-	 --vcpus=1 \
+	 --vcpus=${slave_vcpus[$i]} \
 	 --arch=x86_64 \
 	 $virt_disks_params \
 	 $virt_net_params \

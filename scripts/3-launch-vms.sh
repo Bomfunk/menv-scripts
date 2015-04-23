@@ -19,9 +19,19 @@ then
 	fi
 fi
 
+if [ -z $master_vcpus ]
+then
+	if [ -z $default_vcpus ]
+	then
+		master_vcpus=1024
+	else
+		master_vcpus=$default_vcpus
+	fi
+fi
+
 sudo virt-install -n $VM_NAME \
  -r $master_ram \
- --vcpus=1 \
+ --vcpus=$master_vcpus \
  --arch=x86_64 \
  --disk path=$PATH_TO_ENV/diff.fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
  $virt_net_params \
@@ -85,9 +95,19 @@ do
 		fi
 	fi
 
+	if [ -z ${slave_vcpus[$i]} ]
+	then
+		if [ -z $default_vcpus ]
+		then
+			slave_vcpus[$i]=1
+		else
+			slave_vcpus[$i]=$default_vcpus
+		fi
+	fi
+
 	sudo virt-install -n $VM_NAME \
 	 -r ${slave_ram[$i]} \
-	 --vcpus=1 \
+	 --vcpus=${slave_vcpus[$i]} \
 	 --arch=x86_64 \
 	 $virt_disks_params \
 	 $virt_net_params \
