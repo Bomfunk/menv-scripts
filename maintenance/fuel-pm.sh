@@ -24,7 +24,7 @@ if [ -z $master_vcpus ]
 then
 	if [ -z $default_vcpus ]
 	then
-		master_vcpus=1024
+		master_vcpus=1
 	else
 		master_vcpus=$default_vcpus
 	fi
