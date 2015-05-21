@@ -8,7 +8,7 @@ then
 	exit 1
 fi
 
-export PATH_TO_ENV=$(readlink -f $1)
+export PATH_TO_ENV=$(readlink -e $1)
 if [ ! -d "$PATH_TO_ENV" ]
 then
 	echo "The specified environment directory doesn't exist, aborting."
