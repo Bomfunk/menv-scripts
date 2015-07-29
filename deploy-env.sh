@@ -25,10 +25,17 @@ fi
 
 if [ $(cat /proc/sys/net/ipv4/ip_forward) == "0" ]
 then
-	echo "IP Forwarding is not enabled on this machine!"
+	echo "WARNING: IP Forwarding is not enabled on this machine!"
 	echo "It is necessary for the VMs to reach Internet."
-	echo "Please enable it using this command and try again: \"echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward\""
-	exit 1
+	echo "To enable it, you can use the following command and try again: \"echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward\""
+
+	echo "Do you want to continue? (yes/no)"
+	read CONT_VAR
+	if [ ! $CONT_VAR == "yes" ]
+	then
+		echo "Aborted."
+		exit 1
+	fi
 fi
 
 export PATH_TO_ENV=$(readlink -e $1)
@@ -40,6 +47,34 @@ fi
 
 INET_IF=$2
 source $PATH_TO_ENV/env.cfg
+
+if [ ! -e /sys/class/net/$INET_IF ]
+then
+	echo "WARNING: The specified interface ($INET_IF) does not exist (/sys/class/net/$INET_IF was not found)."
+
+	echo "Do you want to continue? (yes/no)"
+	read CONT_VAR
+	if [ ! $CONT_VAR == "yes" ]
+	then
+		echo "Aborted."
+		exit 1
+	fi
+fi
+
+pidof libvirtd > /dev/null 2> /dev/null
+
+if [ $? -ne 0 ]
+then
+	echo "WARNING: The 'libvirtd' process does not seem to be running."
+
+	echo "Do you want to continue? (yes/no)"
+	read CONT_VAR
+	if [ ! $CONT_VAR == "yes" ]
+	then
+		echo "Aborted."
+		exit 1
+	fi
+fi
 
 echo -n $INET_IF > $PATH_TO_ENV/inet_if
 
