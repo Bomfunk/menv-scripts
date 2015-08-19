@@ -1,6 +1,6 @@
 #!/bin/bash
 
-server="172.18.66.13"
+server="172.18.186.226"
 envs_path="$HOME/mte/"
 
 ALL_ARGS=$(getopt -o p:s: --long path:,server: -n $0 -- "$@")
@@ -21,7 +21,7 @@ then
 	echo "If you want to get ALL available environments, just specify \"all\". That might take a while though."
 	echo "Available parameters:"
 	echo "	-p|--path <directory> : Path to the directory that will store the environments locally. Default is ~/mte/ (\$HOME/mte/)."
-	echo "	-s|--server <host_or_ip> : IP address of the rsync server with \"mte\" module. Default is 172.18.66.13".
+	echo "	-s|--server <host_or_ip> : IP address of the rsync server with \"mte\" module. Default is 172.18.186.226".
 	echo "Here are the environments that are available on the server:"
 	rsync $server::mte/\*
 	exit 1
