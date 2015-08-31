@@ -14,6 +14,7 @@ then
 	exit 1
 fi
 
+pushd $(dirname $0)/.. > /dev/null
 ./maintenance/save-snapshots.sh
 ./destroy-env.sh $PATH_TO_ENV
 

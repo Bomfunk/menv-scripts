@@ -94,6 +94,7 @@ then
 	fi
 fi
 
+pushd $(dirname $0) > /dev/null
 echo "Initializing network..."
 ./scripts/1-init-network.sh
 

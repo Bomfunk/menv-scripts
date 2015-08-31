@@ -42,7 +42,7 @@ sudo virt-install -n $VM_NAME \
 if [ $? -ne 0 ]
 then
 	echo "Error encountered while launching a VM: terminating."
-	echo "Note: you may want to launch ./destroy-env.sh script to clear the networks/incomplete vms."
+	echo "Note: you may want to launch destroy-env.sh script to clear the networks/incomplete vms."
 	exit 1
 fi
 

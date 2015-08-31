@@ -24,6 +24,7 @@ fi
 INET_IF=$(cat $PATH_TO_ENV/inet_if)
 source $PATH_TO_ENV/env.cfg
 
+pushd $(dirname $0) > /dev/null
 echo "Initializing network..."
 ./scripts/1-init-network.sh
 

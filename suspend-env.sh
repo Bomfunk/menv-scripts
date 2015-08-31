@@ -53,10 +53,11 @@ then
 	fi
 fi
 
+pushd $(dirname $0) > /dev/null
 echo "Stopping/undefining VMs..."
 ./scripts/4-destroy-vms.sh
 
 echo "Destroying networks..."
 ./scripts/5-destroy-networks.sh
 
-echo "All done. To resume the environment, please run './resume-env.sh <PATH_TO_ENV>'."
+echo "All done. To resume the environment, please run 'resume-env.sh <PATH_TO_ENV>'."

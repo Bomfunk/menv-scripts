@@ -23,4 +23,5 @@ do
 	done
 done
 
+pushd $(dirname $0)/.. > /dev/null
 ./scripts/2-apply-snapshots.sh

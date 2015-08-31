@@ -20,6 +20,7 @@ source $PATH_TO_ENV/env.cfg
 
 echo -n $INET_IF > $PATH_TO_ENV/inet_if
 
+pushd $(dirname $0)/.. > /dev/null
 ./scripts/1-init-network.sh
 ./maintenance/new-disks.sh
 ./maintenance/fuel-pm.sh
@@ -28,4 +29,4 @@ ssh-keygen -P "" -f $PATH_TO_ENV/master-key
 
 echo "When master node finishes OS installing, it usually goes down instead of rebooting - that's how QEMU works by default."
 echo "Simply execute \"sudo virsh start $vm_prefix-pm\" to bring it back up. To monitor it's initial state, use \"watch -n 15 sudo virsh list --all\""
-echo "Once master node is ready, launch the next script: ./maintenance/2-launch-slaves.sh"
+echo "Once master node is ready, launch the next script: maintenance/2-launch-slaves.sh"
