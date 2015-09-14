@@ -29,6 +29,8 @@ then
 	fi
 fi
 
+sudo virsh desc $VM_NAME > /dev/null 2> /dev/null
+if [ $? -eq 0 ] ; then sudo virsh destroy $VM_NAME ; sudo virsh undefine $VM_NAME ; fi
 sudo virt-install -n $VM_NAME \
  -r $master_ram \
  --vcpus=$master_vcpus \
@@ -105,6 +107,8 @@ do
 		fi
 	fi
 
+	sudo virsh desc $VM_NAME > /dev/null 2> /dev/null
+	if [ $? -eq 0 ] ; then sudo virsh destroy $VM_NAME ; sudo virsh undefine $VM_NAME ; fi
 	sudo virt-install -n $VM_NAME \
 	 -r ${slave_ram[$i]} \
 	 --vcpus=${slave_vcpus[$i]} \
