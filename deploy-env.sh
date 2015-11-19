@@ -46,6 +46,7 @@ then
 fi
 
 INET_IF=$2
+INET_IF_IP=$(ip -o -4 addr list $INET_IF | awk '{print $4}' | cut -d/ -f1)
 source $PATH_TO_ENV/env.cfg
 
 if [ ! -e /sys/class/net/$INET_IF ]
@@ -108,7 +109,7 @@ echo "All done. Use IP address $master_ip to access Fuel Master, and $horizon_ip
 if $external_forward
 then
 	echo "Also, the following port forwards are set on this machine: "
-	echo "(Note: the IP of this host on $INET_IF is $(ip -o -4 addr list $INET_IF | awk '{print $4}' | cut -d/ -f1))"
+	echo "(Note: the IP of this host on $INET_IF is $INET_IF_IP)"
 	for i in $(seq 1 $forward_count)
 	do
 		echo -n "0.0.0.0:${ex_forw[$i]} to ${ex_forw_to[$i]}"
@@ -118,5 +119,13 @@ then
 else
 	echo "Port forwards were not configured on this machine."
 fi
+
+echo -n "If you use sshuttle, here is the suggested command for it: sshuttle -r mirantis@$INET_IF_IP "
+for i in $(seq 1 $networks)
+do
+	echo -n "${subnet[i]}.0/24 "
+done
+echo ; echo # Double line break
+
 echo "Use destroy-env.sh script to tear down the environment and destroy the networks."
 echo "Enjoy!"
