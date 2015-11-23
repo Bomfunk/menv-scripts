@@ -18,7 +18,8 @@ fi
 INET_IF=$2
 source $PATH_TO_ENV/env.cfg
 
-echo -n $INET_IF > $PATH_TO_ENV/inet_if
+mkdir -p $PATH_TO_ENV/statedir
+echo -n $INET_IF > $PATH_TO_ENV/statedir/inet_if
 
 pushd $(dirname $0)/.. > /dev/null
 ./scripts/1-init-network.sh

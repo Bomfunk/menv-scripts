@@ -14,14 +14,14 @@ then
 	exit 1
 fi
 
-if [ ! -f $PATH_TO_ENV/inet_if ]
+if [ ! -f $PATH_TO_ENV/statedir/inet_if ]
 then
 	echo "There isn't any environment yet, is there?.."
-	echo "(The inet_if file was not found, it should contain the name of network interface with Internet access.)"
+	echo "(The statedir/inet_if file was not found, it should contain the name of network interface with Internet access.)"
 	exit 1
 fi
 
-INET_IF=$(cat $PATH_TO_ENV/inet_if)
+INET_IF=$(cat $PATH_TO_ENV/statedir/inet_if)
 source $PATH_TO_ENV/env.cfg
 
 pushd $(dirname $0) > /dev/null

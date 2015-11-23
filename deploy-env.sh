@@ -77,7 +77,8 @@ then
 	fi
 fi
 
-echo -n $INET_IF > $PATH_TO_ENV/inet_if
+mkdir -p $PATH_TO_ENV/statedir
+echo -n $INET_IF > $PATH_TO_ENV/statedir/inet_if
 
 echo "What is going to be deployed is described below."
 echo "------------------------------------------------"

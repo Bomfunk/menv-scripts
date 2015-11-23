@@ -14,14 +14,14 @@ then
 	exit 1
 fi
 
-if [ ! -f $PATH_TO_ENV/inet_if ]
+if [ ! -f $PATH_TO_ENV/statedir/inet_if ]
 then
 	echo "There isn't any environment yet, is there?.."
-	echo "(The inet_if file was not found, it should contain the name of network interface with Internet access.)"
+	echo "(The statedir/inet_if file was not found, it should contain the name of network interface with Internet access.)"
 	exit 1
 fi
 
-INET_IF=$(cat $PATH_TO_ENV/inet_if)
+INET_IF=$(cat $PATH_TO_ENV/statedir/inet_if)
 source $PATH_TO_ENV/env.cfg
 
 pushd $(dirname $0) > /dev/null
@@ -32,8 +32,10 @@ echo "Destroying remaining networks..."
 ./scripts/5-destroy-networks.sh
 
 echo "Removing diff qcow2's..."
-sudo rm $PATH_TO_ENV/diff*
+sudo rm $PATH_TO_ENV/statedir/diff*
 
-rm -f $PATH_TO_ENV/inet_if
+rm -f $PATH_TO_ENV/statedir/inet_if
+
+rmdir $PATH_TO_ENV/statedir 2> /dev/null
 
 echo "All done. Goodbye!"

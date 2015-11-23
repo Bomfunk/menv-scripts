@@ -35,7 +35,7 @@ sudo virt-install -n $VM_NAME \
  -r $master_ram \
  --vcpus=$master_vcpus \
  --arch=x86_64 \
- --disk path=$PATH_TO_ENV/diff.fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
+ --disk path=$PATH_TO_ENV/statedir/diff.fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
  $virt_net_params \
  --boot hd \
  --noautoconsole \
@@ -84,7 +84,7 @@ do
 	virt_disks_params=""
 	for j in $(seq 1 ${node_disks[$i]})
 	do
-		virt_disks_params="$virt_disks_params --disk path=$PATH_TO_ENV/diff.fuel-slave-$i-$j.qcow2,bus=virtio,device=disk,format=qcow2"
+		virt_disks_params="$virt_disks_params --disk path=$PATH_TO_ENV/statedir/diff.fuel-slave-$i-$j.qcow2,bus=virtio,device=disk,format=qcow2"
 	done
 
 	if [ -z ${slave_ram[$i]} ]
