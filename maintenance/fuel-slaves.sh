@@ -4,7 +4,13 @@ source $PATH_TO_ENV/env.cfg
 
 for i in $(seq 1 $slaves_count)
 do
-	VM_NAME=$vm_prefix-slave-$i
+	if [ -z ${slave_name[$i]} ]
+	then
+		VM_NAME=$vm_prefix-slave-$i
+	else
+		VM_NAME=$vm_prefix-${slave_name[$i]}
+	fi
+
 	if [ $i -lt 10 ]
 	then
 		MACNUM="0$i"
@@ -15,7 +21,14 @@ do
 	virt_net_params=""
 	for j in $(seq 1 $networks)
 	do
-		virt_net_params="$virt_net_params --bridge=$net_prefix-$j,mac=${subnet_mac_prefix[$j]}:$MACNUM"
+		if [ -z ${subnet_name[$j]} ]
+		then
+			net_name=$net_prefix-$j
+		else
+			net_name=$net_prefix-${subnet_name[$j]}
+		fi
+
+		virt_net_params="$virt_net_params --bridge=$net_name,mac=${subnet_mac_prefix[$j]}:$MACNUM"
 	done
 
 	if [ -z ${node_disks[$i]} ]

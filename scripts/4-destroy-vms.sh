@@ -2,10 +2,24 @@
 
 source $PATH_TO_ENV/env.cfg
 
-sudo virsh destroy $vm_prefix-pm
-sudo virsh undefine $vm_prefix-pm
+if [ -z $master_name ]
+then
+	VM_NAME=$vm_prefix-master
+else
+	VM_NAME=$vm_prefix-$master_name
+fi
+
+sudo virsh destroy $VM_NAME
+sudo virsh undefine $VM_NAME
 for i in $(seq 1 $slaves_count)
 do
-	sudo virsh destroy $vm_prefix-slave-$i
-	sudo virsh undefine $vm_prefix-slave-$i
+	if [ -z ${slave_name[$i]} ]
+	then
+		VM_NAME=$vm_prefix-slave-$i
+	else
+		VM_NAME=$vm_prefix-${slave_name[$i]}
+	fi
+
+	sudo virsh destroy $VM_NAME
+	sudo virsh undefine $VM_NAME
 done

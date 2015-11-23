@@ -2,12 +2,24 @@
 
 source $PATH_TO_ENV/env.cfg
 
-VM_NAME=$vm_prefix-pm
+if [ -z $master_name ]
+then
+	VM_NAME=$vm_prefix-master
+else
+	VM_NAME=$vm_prefix-$master_name
+fi
 
 virt_net_params=""
 for i in $(seq 1 $networks)
 do
-	virt_net_params="$virt_net_params --bridge=$net_prefix-$i,mac=${subnet_mac_prefix[$i]}:00"
+	if [ -z ${subnet_name[$i]} ]
+	then
+		net_name=$net_prefix-$i
+	else
+		net_name=$net_prefix-${subnet_name[$i]}
+	fi
+
+	virt_net_params="$virt_net_params --bridge=$net_name,mac=${subnet_mac_prefix[$i]}:00"
 done
 
 if [ -z $master_ram ]
