@@ -28,6 +28,13 @@ pushd $(dirname $0)/.. > /dev/null
 
 ssh-keygen -P "" -f $PATH_TO_ENV/master-key
 
+if [ -z $master_name ]
+then
+	mname="master"
+else
+	mname=$master_name
+fi
+
 echo "When master node finishes OS installing, it usually goes down instead of rebooting - that's how QEMU works by default."
-echo "Simply execute \"sudo virsh start $vm_prefix-pm\" to bring it back up. To monitor it's initial state, use \"watch -n 15 sudo virsh list --all\""
+echo "Simply execute \"sudo virsh start $vm_prefix-$mname\" to bring it back up. To monitor it's initial state, use \"watch -n 15 sudo virsh list --all\""
 echo "Once master node is ready, launch the next script: maintenance/2-launch-slaves.sh"
