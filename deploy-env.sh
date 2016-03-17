@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ALL_ARGS=$(getopt -o y --long yes -n $0 -- "$@")
+ALL_ARGS=$(getopt -o y --long yes -o i --long info -n $0 -- "$@")
 eval set -- "$ALL_ARGS"
 
 function info {
@@ -32,7 +32,7 @@ while true
 do
 	case "$1" in
 		-y|--yes) NEEDCONFIRM=false ; shift ;;
-        -i|--info) info ; shift; exit 1;;
+        -i|--info) info ; exit 1;;
 		--) shift; break ;;
 		*) echo "Internal error." ; exit 1 ;;
 	esac
