@@ -4,6 +4,12 @@ ALL_ARGS=$(getopt -o y --long yes -o i --long info -n $0 -- "$@")
 eval set -- "$ALL_ARGS"
 
 function info {
+    export PATH_TO_ENV=$(readlink -e $1)
+    if [ ! -d "$PATH_TO_ENV" ]
+    then
+        echo "The specified environment directory doesn't exist, aborting."
+        exit 1
+    fi
     echo "Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
     if $external_forward
     then
