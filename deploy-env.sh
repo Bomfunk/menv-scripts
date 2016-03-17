@@ -9,7 +9,10 @@ while true
 do
         case "$1" in
 		-y|--yes) NEEDCONFIRM=false ; shift ;;
+<<<<<<< HEAD
                 -i|--info) NEEDINFO=true ;shift;;
+=======
+>>>>>>> parent of def86cc... Add ability to show network information
 		--) shift; break ;;
 		*) echo "Internal error." ; exit 1 ;;
 	esac
@@ -55,7 +58,10 @@ then
 	echo "and INET_IF is a network interface name which has access to Internet (for Public network)."
 	echo "Options:"
 	echo " -y/--yes		Proceed without asking for a confirmation."
+<<<<<<< HEAD
         echo " -i/--info    Get the information about network settings"
+=======
+>>>>>>> parent of def86cc... Add ability to show network information
 	exit 1
 fi
 
