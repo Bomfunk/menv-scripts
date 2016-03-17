@@ -48,20 +48,20 @@ function show_net_info {
         echo ; echo
 }
 
-if $NEEDINFO
-then
-	show_net_info
-	exit 1
-fi
-
 if [ $# -ne 2 ]
 then
 	echo "Usage: $0 [options] <PATH_TO_ENV> <INET_IF>"
 	echo "Where PATH_TO_ENV is path to the environment - snapshots, configuration file etc.,"
 	echo "and INET_IF is a network interface name which has access to Internet (for Public network)."
 	echo "Options:"
-	echo " -y/--yes		Proceed without asking for a confirmation."
-	echo " -i/--info    Get the information about network settings"
+	echo " -y/--yes         Proceed without asking for a confirmation."
+	echo " -i/--info        Get the information about network settings"
+	exit 1
+fi
+
+if $NEEDINFO
+then
+	show_net_info
 	exit 1
 fi
 
