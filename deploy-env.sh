@@ -3,28 +3,28 @@
 ALL_ARGS=$(getopt -o y --long yes -n $0 -- "$@")
 eval set -- "$ALL_ARGS"
 
-function info{
-echo "Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
-if $external_forward
-then
-    echo "Also, the following port forwards are set on this machine: "
-    echo "(Note: the IP of this host on $INET_IF is $INET_IF_IP)"
-    for i in $(seq 1 $forward_count)
-    do  
-        echo -n "0.0.0.0:${ex_forw[$i]} to ${ex_forw_to[$i]}"
-        if [ $i -lt $forward_count ] ; then echo "," ; else echo "." ; fi
-    done
-    echo
-else
-    echo "Port forwards were not configured on this machine."
-fi
+function info {
+    echo "Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
+    if $external_forward
+    then
+        echo "Also, the following port forwards are set on this machine: "
+        echo "(Note: the IP of this host on $INET_IF is $INET_IF_IP)"
+        for i in $(seq 1 $forward_count)
+        do  
+            echo -n "0.0.0.0:${ex_forw[$i]} to ${ex_forw_to[$i]}"
+            if [ $i -lt $forward_count ] ; then echo "," ; else echo "." ; fi
+        done
+        echo
+    else
+        echo "Port forwards were not configured on this machine."
+    fi
 
-echo -n "If you use sshuttle, here is the suggested command for it: sshuttle -r mirantis@$INET_IF_IP "
-for i in $(seq 1 $networks)
-do
-    echo -n "${subnet[i]}.0/24 "
-done
-echo ; echo
+    echo -n "If you use sshuttle, here is the suggested command for it: sshuttle -r mirantis@$INET_IF_IP "
+    for i in $(seq 1 $networks)
+    do
+        echo -n "${subnet[i]}.0/24 "
+    done
+    echo ; echo
 }
 
 NEEDCONFIRM=true
