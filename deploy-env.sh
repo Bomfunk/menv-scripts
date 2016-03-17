@@ -15,7 +15,7 @@ do
 	esac
 done
 
-if [$NEEDINFO]
+if $NEEDINFO
 then
         export PATH_TO_ENV=$(readlink -e $1)
         if [ ! -d "$PATH_TO_ENV" ]
@@ -44,6 +44,7 @@ then
                 echo -n "${subnet[i]}.0/24 "
         done
         echo ; echo
+        exit 1
 fi
 
 if [ $# -ne 2 ]
