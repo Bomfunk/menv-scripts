@@ -17,6 +17,12 @@ done
 
 if $NEEDINFO
 then
+        export PATH_TO_ENV=$(readlink -e $1)
+        if [ ! -d "$PATH_TO_ENV" ]
+        then
+                echo "The specified environment directory doesn't exist, aborting."
+                exit 1
+        fi
         source $PATH_TO_ENV/env.cfg
         echo "Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
         if $external_forward
