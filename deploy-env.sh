@@ -1,30 +1,5 @@
 #!/bin/bash
 
-ALL_ARGS=$(getopt -o yi --long yes,info -n $0 -- "$@")
-eval set -- "$ALL_ARGS"
-
-NEEDCONFIRM=true
-NEEDINFO=false
-while true
-do
-	case "$1" in
-		-y|--yes) NEEDCONFIRM=false ; shift ;;
-		-i|--info) NEEDINFO=true ;shift;;
-		--) shift; break ;;
-		*) echo "Internal error." ; exit 1 ;;
-	esac
-done
-
-export PATH_TO_ENV=$(readlink -e $1)
-if [ ! -d "$PATH_TO_ENV" ]
-then
-	echo "The specified environment directory doesn't exist, aborting."
-	exit 1
-fi
-source $PATH_TO_ENV/env.cfg
-INET_IF=$2
-INET_IF_IP=$(ip -o -4 addr list $INET_IF | awk '{print $4}' | cut -d/ -f1)
-
 function show_net_info {
         echo "Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
         if $external_forward
@@ -47,21 +22,67 @@ function show_net_info {
         done
         echo ; echo
 }
-
-if $NEEDINFO
-then
-	show_net_info
-	exit 1
-fi
-
-if [ $# -ne 2 ]
-then
+function print_usage {
 	echo "Usage: $0 [options] <PATH_TO_ENV> <INET_IF>"
 	echo "Where PATH_TO_ENV is path to the environment - snapshots, configuration file etc.,"
 	echo "and INET_IF is a network interface name which has access to Internet (for Public network)."
 	echo "Options:"
 	echo " -y/--yes		Proceed without asking for a confirmation."
-	echo " -i/--info    Get the information about network settings"
+	echo " -i/--info	Get the information about network settings (if this parameter is specified, <INET_IF> is no longer required.)"
+}
+
+ALL_ARGS=$(getopt -o yi --long yes,info -n $0 -- "$@")
+eval set -- "$ALL_ARGS"
+
+NEEDCONFIRM=true
+NEEDINFO=false
+while true
+do
+	case "$1" in
+		-y|--yes) NEEDCONFIRM=false; shift ;;
+		-i|--info) NEEDINFO=true; shift ;;
+		--) shift; break ;;
+		*) echo "Internal error." ; exit 1 ;;
+	esac
+done
+
+if [ $# -lt 1 ] || [ $# -gt 2 ]
+then
+	print_usage
+	exit 1
+fi
+export PATH_TO_ENV=$(readlink -e $1)
+if [ ! -d "$PATH_TO_ENV" ]
+then
+	echo "The specified environment directory doesn't exist, aborting."
+	exit 1
+fi
+source $PATH_TO_ENV/env.cfg
+
+if [ $# -eq 2 ]
+then
+	INET_IF=$2
+	INET_IF_IP=$(ip -o -4 addr list $INET_IF | awk '{print $4}' | cut -d/ -f1)
+else
+	if $NEEDINFO
+	then
+		if [ ! -f $PATH_TO_ENV/statedir/inet_if ]
+		then
+			echo "There isn't any environment yet, is there?.."
+			echo "(The statedir/inet_if file was not found, it should contain the name of network interface with Internet access.)"
+			exit 1
+		fi
+		
+		INET_IF=$(cat $PATH_TO_ENV/statedir/inet_if)
+	else
+		print_usage
+		exit 1
+	fi
+fi
+
+if $NEEDINFO
+then
+	show_net_info
 	exit 1
 fi
 
