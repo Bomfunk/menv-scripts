@@ -13,6 +13,12 @@ then
 	echo "The specified environment directory doesn't exist, aborting."
 	exit 1
 fi
+if [ ! -e "$PATH_TO_ENV/env.cfg" ]
+then
+	echo "There is no env.cfg file in the directory, so it does not appear to be a valid environment directory."
+	echo "Please make sure you have specified correct directory."
+	exit 1
+fi
 
 pushd $(dirname $0)/.. > /dev/null
 ./maintenance/save-snapshots.sh
