@@ -68,7 +68,6 @@ source $PATH_TO_ENV/env.cfg
 if [ $# -eq 2 ]
 then
 	INET_IF=$2
-	INET_IF_IP=$(ip -o -4 addr list $INET_IF | awk '{print $4}' | cut -d/ -f1)
 else
 	if $NEEDINFO
 	then
@@ -85,6 +84,7 @@ else
 		exit 1
 	fi
 fi
+INET_IF_IP=$(ip -o -4 addr list $INET_IF | awk '{print $4}' | cut -d/ -f1)
 
 if $NEEDINFO
 then
