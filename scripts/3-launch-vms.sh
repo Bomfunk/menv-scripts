@@ -47,6 +47,7 @@ if [ $? -eq 0 ] ; then sudo virsh destroy $VM_NAME ; sudo virsh undefine $VM_NAM
 sudo virt-install -n $VM_NAME \
  -r $master_ram \
  --vcpus=$master_vcpus \
+ --cpu host \
  --arch=x86_64 \
  --disk path=$PATH_TO_ENV/statedir/diff.fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
  $virt_net_params \
@@ -138,6 +139,7 @@ do
 	sudo virt-install -n $VM_NAME \
 	 -r ${slave_ram[$i]} \
 	 --vcpus=${slave_vcpus[$i]} \
+         --cpu host \
 	 --arch=x86_64 \
 	 $virt_disks_params \
 	 $virt_net_params \

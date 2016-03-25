@@ -45,6 +45,7 @@ fi
 sudo virt-install -n $VM_NAME \
  -r $master_ram \
  --vcpus=$master_vcpus \
+ --cpu host \
  --arch=x86_64 \
  --disk path=$PATH_TO_ENV/fuel-pm.qcow2,bus=virtio,device=disk,format=qcow2 \
  --cdrom $iso_path \
