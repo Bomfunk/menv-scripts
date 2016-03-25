@@ -22,7 +22,7 @@ then
 	echo "Usage: $0 [parameters] <env_to_get>"
 	echo "If you want to get ALL available environments, just specify \"all\". That might take a while though."
 	echo "Available parameters:"
-	echo "	-c|--compare: Compare if local mte copy differs from copy on remote server, print changed on server files list and exit."
+	echo "	-c|--compare: Compare if local mte copy differs from copy on remote server using rsync --itemize-changes. See rsync man for output format details"
 	echo "	-p|--path <directory> : Path to the directory that will store the environments locally. Default is ~/mte/ (\$HOME/mte/)."
 	echo "	-s|--server <host_or_ip> : IP address of the rsync server with \"mte\" module. Default is 172.18.186.226".
 	echo "Here are the environments that are available on the server:"
@@ -37,7 +37,7 @@ if [ "$wenv" == "all" ]; then
 fi
 
 if [ "$compare" = true ] ; then
-   rsync -an  --out-format="[%t]:%o:%f:Last Modified %M" $server::mte/$wenv $envs_path/
+   rsync -an --itemize-changes --exclude 'snapshots' $server::mte/$wenv $envs_path/
    exit 1
 fi
 
