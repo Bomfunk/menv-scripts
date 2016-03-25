@@ -70,6 +70,7 @@ do
 	sudo virt-install -n $VM_NAME \
 	 -r ${slave_ram[$i]} \
 	 --vcpus=${slave_vcpus[$i]} \
+         --cpu host \
 	 --arch=x86_64 \
 	 $virt_disks_params \
 	 $virt_net_params \
