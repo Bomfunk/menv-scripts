@@ -19,7 +19,7 @@ do
 		net_name=$net_prefix-${subnet_name[$i]}
 	fi
 
-	virt_net_params="$virt_net_params --bridge=$net_name,mac=${subnet_mac_prefix[$i]}:00"
+	virt_net_params="$virt_net_params --bridge=$net_name,mac=${subnet_mac_prefix[$i]}:00,model=virtio"
 done
 
 if [ -z $master_ram ]
@@ -95,7 +95,7 @@ do
 			net_name=$net_prefix-${subnet_name[$j]}
 		fi
 
-		virt_net_params="$virt_net_params --bridge=$net_name,mac=${subnet_mac_prefix[$j]}:$MACNUM"
+		virt_net_params="$virt_net_params --bridge=$net_name,mac=${subnet_mac_prefix[$j]}:$MACNUM,model=virtio"
 	done
 
 	if [ -z ${node_disks[$i]} ]

@@ -28,7 +28,7 @@ do
 			net_name=$net_prefix-${subnet_name[$j]}
 		fi
 
-		virt_net_params="$virt_net_params --bridge=$net_name,mac=${subnet_mac_prefix[$j]}:$MACNUM"
+		virt_net_params="$virt_net_params --bridge=$net_name,mac=${subnet_mac_prefix[$j]}:$MACNUM,model=virtio"
 	done
 
 	if [ -z ${node_disks[$i]} ]
