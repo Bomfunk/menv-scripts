@@ -1,15 +1,47 @@
 #!/bin/bash
 
+function show_bridges_info {
+bridges_desc="Network bridges:\n"
+for i in $(seq 1 $networks)
+do
+        if [ -z ${subnet_name[$i]} ]
+        then
+                net_name=$net_prefix-$i
+        else
+                net_name=$net_prefix-${subnet_name[$i]}
+        fi
+	bridges_desc="$bridges_desc $net_name, ${subnet[i]}.1/24, Internet_access=${subnet_internet[i]}, promiscuous_mode=${subnet_promisc[i]}\n"
+done
+printf "$bridges_desc\n"
+}
+
+function show_vms_info {
+vms_desc="Virtual machines:
+ fuel-pm, $master_vcpus CPU, $master_ram MB RAM
+"
+for i in $(seq 1 $slaves_count)
+do
+        if [ -z ${slave_name[$i]} ]
+        then
+                VM_NAME=$vm_prefix-slave-$i
+        else
+                VM_NAME=$vm_prefix-${slave_name[$i]}
+        fi
+	vms_desc="$vms_desc $VM_NAME, ${slave_vcpus[i]} CPU, ${slave_ram[i]} MB\n"
+done
+printf "$vms_desc\n"
+}
+
 function show_net_info {
         echo "Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
+        echo  
         if $external_forward
         then
-                echo "Also, the following port forwards are set on this machine: "
+                echo "Also, the following port forwards are configured for all interfaces(0.0.0.0) on this host: "
                 echo "(Note: the IP of this host on $INET_IF is $INET_IF_IP)"
                 for i in $(seq 1 $forward_count)
                 do
-                        echo -n "0.0.0.0:${ex_forw[$i]} to ${ex_forw_to[$i]}"
-                        if [ $i -lt $forward_count ] ; then echo "," ; else echo "." ; fi
+                        printf "%-20s to %-20s %-s\n" "$INET_IF_IP:${ex_forw[$i]}" "${ex_forw_to[$i]}" "${ex_forw_desc[$i]}"
                 done
         echo
         else
@@ -22,6 +54,8 @@ function show_net_info {
         done
         echo ; echo
 }
+
+
 function print_usage {
 	echo "Usage: $0 [options] <PATH_TO_ENV> <INET_IF>"
 	echo "Where PATH_TO_ENV is path to the environment - snapshots, configuration file etc.,"
@@ -88,6 +122,8 @@ INET_IF_IP=$(ip -o -4 addr list $INET_IF | awk '{print $4}' | cut -d/ -f1)
 
 if $NEEDINFO
 then
+	show_bridges_info
+	show_vms_info
 	show_net_info
 	exit 1
 fi
@@ -141,6 +177,12 @@ echo -n $INET_IF > $PATH_TO_ENV/statedir/inet_if
 echo "What is going to be deployed is described below."
 echo "------------------------------------------------"
 echo "$deploy_desc"
+echo  
+show_bridges_info
+show_vms_info
+show_net_info
+
+
 if $NEEDCONFIRM
 then
 	echo "Do you want to continue? (yes/no)"
