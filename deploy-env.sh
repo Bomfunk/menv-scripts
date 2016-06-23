@@ -177,7 +177,6 @@ echo -n $INET_IF > $PATH_TO_ENV/statedir/inet_if
 echo "What is going to be deployed is described below."
 echo "------------------------------------------------"
 echo "$deploy_desc"
-echo  
 show_bridges_info
 show_vms_info
 show_net_info
