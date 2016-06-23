@@ -72,7 +72,7 @@ then
 	pause_before_slaves=30
 fi
 echo "Master node is ready! Waiting ${pause_before_slaves} seconds before proceeding..."
-sleep pause_before_slaves
+sleep ${pause_before_slaves}
 
 for i in $(seq 1 $slaves_count)
 do
