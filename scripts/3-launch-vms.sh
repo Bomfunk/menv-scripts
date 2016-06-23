@@ -66,8 +66,13 @@ sudo virsh vncdisplay $VM_NAME
 
 echo "Waiting for fuel master to become ready..."
 $PATH_TO_ENV/preparation/wait-for-master.sh
-echo "Master node is ready! Waiting 30 seconds before proceeding..."
-sleep 30
+
+if [ -z $pause_before_slaves ] 
+then
+	pause_before_slaves=30
+fi
+echo "Master node is ready! Waiting ${pause_before_slaves} seconds before proceeding..."
+sleep pause_before_slaves
 
 for i in $(seq 1 $slaves_count)
 do
