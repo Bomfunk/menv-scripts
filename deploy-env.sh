@@ -66,7 +66,7 @@ function print_usage {
 	echo "--nostart	Create VMs but do not start them (shut them down immediately after starting)"
 }
 
-ALL_ARGS=$(getopt -o yi --long yes,info -n $0 -- "$@")
+ALL_ARGS=$(getopt -o yi --long yes,info,nostart -n $0 -- "$@")
 eval set -- "$ALL_ARGS"
 
 NEEDCONFIRM=true
