@@ -185,7 +185,7 @@ do
 			sleep $pause_between_slaves
 		fi
 	else
-		sudo virsh destroy sleep $VM_NAME
+		sudo virsh destroy $VM_NAME
 	fi
 done
 
