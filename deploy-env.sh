@@ -76,7 +76,7 @@ do
 	case "$1" in
 		-y|--yes) NEEDCONFIRM=false; shift ;;
 		-i|--info) NEEDINFO=true; shift ;;
-		--nostart) NOSTART=$1; shift ;;
+		--nostart) START=$1; shift ;;
 		--) shift; break ;;
 		*) echo "Internal error." ; exit 1 ;;
 	esac
