@@ -2,6 +2,12 @@
 
 source $PATH_TO_ENV/env.cfg
 
+START=true
+if [ "$1" == "--nostart" ]
+then
+	START=false
+fi
+
 if [ -z $master_name ]
 then
 	VM_NAME=$vm_prefix-master
@@ -64,15 +70,25 @@ fi
 echo -n $VM_NAME
 sudo virsh vncdisplay $VM_NAME
 
-echo "Waiting for fuel master to become ready..."
-$PATH_TO_ENV/preparation/wait-for-master.sh
-
-if [ -z $pause_before_slaves ] 
+if [ $START = true ]
 then
-	pause_before_slaves=30
+	echo "Waiting for fuel master to become ready..."
+	$PATH_TO_ENV/preparation/wait-for-master.sh
+
+	if [ -z $pause_before_slaves ] 
+	then
+		pause_before_slaves=30
+	fi
+else
+	sudo virsh destroy $VM_NAME
 fi
-echo "Master node is ready! Waiting ${pause_before_slaves} seconds before proceeding..."
-sleep ${pause_before_slaves}
+
+echo "Master node is ready!"
+if [ $START = true ]
+then
+	echo "Waiting ${pause_before_slaves} seconds before proceeding..."
+	sleep ${pause_before_slaves}
+fi
 
 for i in $(seq 1 $slaves_count)
 do
@@ -161,10 +177,15 @@ do
 	echo -n $VM_NAME
 	sudo virsh vncdisplay $VM_NAME
 
-	if [ ! -z $pause_between_slaves ] && [ $i -lt $slaves_count ]
+	if [ $START = true ]
 	then
-		echo "Sleeping for $pause_between_slaves..."
-		sleep $pause_between_slaves
+		if [ ! -z $pause_between_slaves ] && [ $i -lt $slaves_count ]
+		then
+			echo "Sleeping for $pause_between_slaves..."
+			sleep $pause_between_slaves
+		fi
+	else
+		sudo virsh destroy $VM_NAME
 	fi
 done
 
