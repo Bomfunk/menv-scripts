@@ -63,9 +63,10 @@ function print_usage {
 	echo "Options:"
 	echo " -y/--yes		Proceed without asking for a confirmation."
 	echo " -i/--info	Get the information about network settings (if this parameter is specified, <INET_IF> is no longer required.)"
+	echo "--nostart	Create VMs but do not start them (shut them down immediately after starting)"
 }
 
-ALL_ARGS=$(getopt -o yi --long yes,info -n $0 -- "$@")
+ALL_ARGS=$(getopt -o yi --long yes,info,nostart -n $0 -- "$@")
 eval set -- "$ALL_ARGS"
 
 NEEDCONFIRM=true
@@ -75,6 +76,7 @@ do
 	case "$1" in
 		-y|--yes) NEEDCONFIRM=false; shift ;;
 		-i|--info) NEEDINFO=true; shift ;;
+		--nostart) START=$1; shift ;;
 		--) shift; break ;;
 		*) echo "Internal error." ; exit 1 ;;
 	esac
@@ -203,7 +205,7 @@ echo "Applying saved snapshots..."
 ./scripts/2-apply-snapshots.sh
 
 echo "Launching VMs..."
-./scripts/3-launch-vms.sh
+./scripts/3-launch-vms.sh $START
 
 echo "All done."
 show_net_info
