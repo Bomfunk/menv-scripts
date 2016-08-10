@@ -33,8 +33,9 @@ printf "$vms_desc\n"
 }
 
 function show_net_info {
-        echo "Use IP address $master_ip to access Fuel Master, and $horizon_ip for Horizon."
-        echo  
+        echo "Use $horizon_ip to access Horizon, and to access Fuel Master:"
+        echo "ssh -i $PATH_TO_ENV/master-key root@$master_ip"
+	echo 
         if $external_forward
         then
                 echo "Also, the following port forwards are configured for all interfaces(0.0.0.0) on this host: "
