@@ -59,6 +59,7 @@ sudo virt-install -n $VM_NAME \
  $virt_net_params \
  --boot hd \
  --noautoconsole \
+ --serial file,path=$PATH_TO_ENV/statedir/${VM_NAME}.log \
  --graphics vnc,listen=0.0.0.0 
 if [ $? -ne 0 ]
 then
@@ -166,6 +167,7 @@ do
 	 $virt_net_params \
 	 --boot network,hd \
 	 --noautoconsole \
+         --serial file,path=$PATH_TO_ENV/statedir/${VM_NAME}.log \
 	 --graphics vnc,listen=0.0.0.0
 	if [ $? -ne 0 ]
 	then
