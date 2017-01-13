@@ -39,6 +39,7 @@ echo "Destroying remaining networks..."
 
 echo "Removing diff qcow2's..."
 sudo rm $PATH_TO_ENV/statedir/diff*
+sudo rm $PATH_TO_ENV/statedir/*.log
 
 rm -f $PATH_TO_ENV/statedir/inet_if
 
