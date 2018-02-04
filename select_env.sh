@@ -2,6 +2,9 @@
 #
 # Display prompt for the environments to be destroyed.
 #
+ 
+declare -a envs		# environments
+
 
 # Populate processes[] with pid of the running machines
 #
@@ -10,22 +13,33 @@ function set_proc() {
 		 # domain[[|domain]...]
 }
 
-# Print out path to envrionment(s).
+# Populate envs[] to the environment directory path
 #
-function dump_env() {
+function set_envs() {
+	declare -a processes	# qemu processes array
+
 	set_proc; for pid in ${processes[@]}
 	do
 		cmdline=/proc/${pid}/cmdline	# cmdline file name
 						# print out only env name; statedir and the following path are stripped
-	        echo `cat $cmdline | tr '\000' ' ' | sed -n 's/.*-drive file=\([^,]\+\).*/\1/p' | sed 's/statedir.*//'`
+	#cat $cmdline | tr '\000' ' ' | sed -n 's/.*-drive file=\([^,]\+\).*/\1/p' | sed 's/statedir.*//'
+	        envs+=( `cat $cmdline | tr '\000' ' ' | sed -n 's/.*-drive file=\([^,]\+\).*/\1/p' | sed 's/statedir.*//'` )
 	done
+
 }
 
 
-declare -a processes	# qemu processes array
+if [ ! `virsh list --name` ]; then
+	echo "no environment found"
+	exit 1
+fi
+
+
+set_envs
+
 
 # Prepare select loop.
-PS3="Please choose the environment: "; select PATH_TO_ENV in ` dump_env | uniq ` # do not display repetative entries
+PS3="Please choose the environment: "; select PATH_TO_ENV in ${envs[@]} 
 do 
 	if [ $PATH_TO_ENV ]
 	 then
