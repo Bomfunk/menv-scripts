@@ -2,11 +2,20 @@
 #
 # Display selection prompt for the running environments.
 
-select PATH_TO_ENV in `ps -ef | grep "[s]tatedir" | sed -e 's/^.*-drive file=\([^,]\+\).*$/\1/g' | sed -e 's/stated.*$//g' | uniq`
+declare -a envs=`ps -ef | grep "[s]tatedir" | sed -e 's/^.*-drive file=\([^,]\+\).*$/\1/g' | sed -e 's/stated.*$//g' | uniq`
+if [ -z "$envs" ]; then
+	echo "no environment running"
+	exit 1
+fi
+
+PS3="Select environment: "
+select path_to_env in ${envs[@]}
 do
-	test ! $PATH_TO_ENV || break
+	if [ -n "$path_to_env" ]
+	then
+		break
+	fi
 done
 
-test ! $PATH_TO_ENV || { echo "no environment running"; exit 1; }
 
-./destroy-env.sh $PATH_TO_ENV
+./destroy-env.sh $path_to_env
